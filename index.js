@@ -1,5 +1,6 @@
 const Unirest = require('unirest');
 const Url = require('url');
+const Path = require('path');
 const Jws = require('jws');
 const _ = require('lodash');
 
@@ -22,6 +23,12 @@ const endpoints = {
       }
     }
   },
+  'get-link': {
+    'path': 'links',
+    'method': 'GET',
+    'resource': {},
+    'params': {}
+  },
   'post-link': {
     'path': 'links',
     'method': 'POST',
@@ -32,6 +39,24 @@ const endpoints = {
       'title': {},
       'url': {}
     }
+  },
+  'put-link': {
+    'path': 'links',
+    'method': 'PUT',
+    'ressource' : {},
+    'params': {
+      'description': {},
+      'private': {},
+      'tags': {},
+      'title': {},
+      'url': {}
+    }
+  },
+  'delete-link': {
+    'path': 'links',
+    'method': 'DELETE',
+    'resource': {},
+    'params': {}
   }
 };
 
@@ -43,47 +68,95 @@ class ShaarliApi {
   }
   
   getInfo(next){
-    return request(this.URL,'get-info',{},this.SECRET,next);
+    
+    const endpoint = 'get-info';
+    const path = this.buildPath(endpoint);
+    const method = endpoints[endpoint].method.toLowerCase();
+    
+    return this.request(path,method,{},next);
   };
 
   getLinks(params,next){
-    return request(this.URL,'get-links',params,this.SECRET,next);
+
+    const endpoint = "get-links";
+    const path = this.buildPath(endpoint);
+    const method = endpoints[endpoint].method.toLowerCase();
+    const parameters = paramsFormater(params,endpoint);
+
+    return this.request(path,method,parameters,next);
+  };
+
+  getLink(id,next){
+  
+    const endpoint = "get-link";
+    const path = Path.join(this.buildPath(endpoint),String(id));
+    const method = endpoints[endpoint].method.toLowerCase();
+
+    return this.request(path,method,{},next);
   };
 
   postLink(params,next){
-    return request(this.URL,'post-link',params,this.SECRET,next);
+
+    const endpoint = "post-link";
+    const path = this.buildPath(endpoint);
+    const method = endpoints[endpoint].method.toLowerCase();
+    
+    return this.request(path,method,params,next);
   };
-}
 
-function request(url,endpoint,params,secret,next){
-  
-  const token = Jws.sign({
-    header: {
-      alg: 'HS512',
-      typ: 'JWT' },
-    payload:{
-      iat: Math.floor(Date.now()/1000)},
-      secret: secret });
-
-  const uri = ''+Url.resolve(url,'api/v1/'+ endpoints[endpoint].path);
-  const method = endpoints[endpoint].method.toLowerCase();
-  
-  if(method == 'get'){
-    Unirest[method](uri)
-      .headers({authorization: 'Bearer ' + token})
-      .query(paramsFormater(params,endpoint))
-      .end(function(res){
-	handleStatus(res,next);
-      });
-  }else{
-    Unirest[method](uri)
-      .headers({authorization: 'Bearer ' + token})
-      .type('application/json')
-      .send(params)
-      .end(function(res){
-	handleStatus(res,next);
-      });
+  putLink(id,params,next){
+    
+    const endpoint = "put-link";
+    const path = Path.join(this.buildPath(endpoint),String(id));
+    const method = endpoints[endpoint].method.toLowerCase();
+    
+    return this.request(path,method,params,next);
   }
+  
+  deleteLink(id,next){
+  
+    const endpoint = "delete-link";
+    const path = Path.join(this.buildPath(endpoint),String(id));
+    const method = endpoints[endpoint].method.toLowerCase();
+
+    return this.request(path,method,{},next);
+  };
+
+};
+
+ShaarliApi.prototype.request = function(path,method,params,next){
+  
+    const token = Jws.sign({
+      header: {
+	alg: 'HS512',
+	typ: 'JWT' },
+      payload:{
+	iat: Math.floor(Date.now()/1000)},
+      secret: this.SECRET
+    });
+
+    const uri = ''+Url.resolve(this.URL,path);
+
+    if(method == 'get'){
+      Unirest[method](uri)
+	.headers({authorization: 'Bearer ' + token})
+	.query(params)
+	.end(function(res){
+	  handleStatus(res,next);
+	});
+    }else{
+      Unirest[method](uri)
+	.headers({authorization: 'Bearer ' + token})
+	.type('application/json')
+	.send(params)
+	.end(function(res){
+	  handleStatus(res,next);
+	});
+    }
+};
+
+ShaarliApi.prototype.buildPath = function(endpoint){
+  return 'api/v1/'+ endpoints[endpoint].path;
 };
 
 function paramsFormater(params,endpoint){
@@ -98,6 +171,7 @@ function paramsFormater(params,endpoint){
 }
 
 function handleStatus(res,next){
+
   if(!res.error)
     return next(null,res.body);
   else

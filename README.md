@@ -20,7 +20,7 @@ var client = new shaarliApi(url,secret);
 
 ## Get Info
 
-Get information about this instance
+Get information about this instance.
 
 ```js
 client.getInfo(function(err,info){
@@ -54,7 +54,19 @@ client.getLinks(params,function(err,links){
 })
 ```
 
-# Post Link
+## Get Link
+
+Get a link with its `id`.
+	
+
+```js 
+
+client.getLink(id,function(err,link){
+	console.log(link);
+})
+```
+
+## Post Link
 
 Create a new link or note.
 
@@ -77,6 +89,41 @@ var params = {
 
 client.postLink(params,function(err,newLink){
 	console.log(newLink);
+});
+```
+
+## Put Link
+
+Update an existing link with provided request data. Keep in mind that all link’s fields will be updated.
+
+`params` is a collection wich can have the following keys:
+
+- `description` (`string`) - Link description
+- `private` (`boolean`) - Link visibility
+- `tags` (`Array`) - List of tags associated with the link
+- `title` (`string`) - Link title
+- `url` (`string`) - Link URL
+
+```js
+var params = {
+	"description": "bloblo",
+	"private": false,
+	"tags": ["image","truc"],
+	"title": "jumping cats calendar",
+	"url": "http://jumpin.cat/post"
+};
+
+client.putLink(id,params,function(err,updateLink){
+	console.log(updateLink);
+});
+```
+
+## Delete Link
+
+Delete a link.
+	
+```js 
+client.deleteLink(id,function(err){
 });
 ```
 
