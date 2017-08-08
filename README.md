@@ -1,21 +1,21 @@
-# Shaarli-api
+# Shaarli-client
 
 a client in node.js for a [shaarli](https://github.com/shaarli/Shaarli) api.
 
 ## Installing
 
-To utilize shaarli-api client, install the the `npm` module:
+To utilize shaarli-client, install the the `npm` module:
 
 ```bash
-npm install shaarli-api
+npm install shaarli-client
 ```
 
 After installing the `npm` package you can now start request shaarli instance like so:
 
 ```js
-var shaarliApi = require('shaarli-api');
+var shaarliClient = require('shaarli-client');
 
-var client = new shaarliApi(url,secret);
+var client = new shaarliClient(url,secret);
 ```
 
 ## Get Info

@@ -1,6 +1,6 @@
 {
-  "name": "shaarli-api",
-  "version": "0.0.2",
+  "name": "shaarli-client",
+  "version": "0.0.1",
   "description": "a client for shaarli API ",
   "main": "index.js",
   "scripts": {
@@ -11,8 +11,12 @@
     "shaarli",
     "client"
   ],
-  "author": "La Bécasse (becasse@cheredeprince.net)",
+  "author": "La Béacsse (becasse@cheredeprince.net)",
   "license": "ISC",
+  "repository" : {
+    "type" : "git",
+    "url" : ""
+  },
   "dependencies": {
     "jws": "3.1.4",
     "lodash": "4.17.4",

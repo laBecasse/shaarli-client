@@ -60,7 +60,7 @@ const endpoints = {
   }
 };
 
-class ShaarliApi {
+class ShaarliClient {
 
   constructor(url,secret){
     this.URL = url;
@@ -124,7 +124,7 @@ class ShaarliApi {
 
 };
 
-ShaarliApi.prototype.request = function(path,method,params,next){
+ShaarliClient.prototype.request = function(path,method,params,next){
   
     const token = Jws.sign({
       header: {
@@ -155,7 +155,7 @@ ShaarliApi.prototype.request = function(path,method,params,next){
     }
 };
 
-ShaarliApi.prototype.buildPath = function(endpoint){
+ShaarliClient.prototype.buildPath = function(endpoint){
   return 'api/v1/'+ endpoints[endpoint].path;
 };
 
@@ -178,4 +178,4 @@ function handleStatus(res,next){
     return next(res.error);
 }
 
-module.exports = ShaarliApi;
+module.exports = ShaarliClient;
