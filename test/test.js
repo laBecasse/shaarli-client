@@ -48,12 +48,12 @@ describe('Shaarli', function() {
     var id;
 
     var params = {
-	"description": "blabla",
-	"private": true,
-	"tags": ["cat","image"],
-	"title": "jumping cats",
-	"url": "http://jumpin.cat/"
-      };
+      "description": "blabla",
+      "private": true,
+      "tags": ["cat","image"],
+      "title": "jumping cats",
+      "url": "http://jumpin.cat/"
+    };
 
     
     it('should port links without error', function(done) {      
@@ -72,7 +72,7 @@ describe('Shaarli', function() {
       describe('#getLink()', function() {
 
 	it('should get the posted link', function(done) {
-  
+          
 	  client.getLink(id,function(err,link){
 	    if(err) return done(err);
 	    expect(link).to.deep.include(params);
@@ -92,7 +92,7 @@ describe('Shaarli', function() {
 	};
 
 	it('should modify the posted link', function(done) {
-  
+          
 	  client.putLink(id,modifier,function(err,link){
 	    if(err) return done(err);
 	    expect(link).to.deep.include(modifier);
@@ -104,7 +104,7 @@ describe('Shaarli', function() {
       describe('#deleteLink()', function() {
 
 	it('should delete a posted link', function(done) {
-  
+          
 	  client.deleteLink(id,function(err){
 	    if(err) return done(err);
 	    return done();
@@ -112,8 +112,14 @@ describe('Shaarli', function() {
 	});
       });
 
-    });
-    
-  });
-
-});
+      describe('#getTags() without params', function () {
+        it('should return links without error', function (done) {
+          client.getTags({},function (err) {
+            if (err) return done(err)
+            return done()
+          })
+        })
+      })
+    })
+  })
+})
