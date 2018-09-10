@@ -1,7 +1,7 @@
 {
   "name": "shaarli-client",
-  "version": "0.0.2",
-  "description": "a client for shaarli API ",
+  "version": "0.0.3",
+  "description": "client for shaarli API",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
@@ -11,19 +11,19 @@
     "shaarli",
     "client"
   ],
-  "author": "La Béacsse (becasse@cheredeprince.net)",
+  "author": "La Bécasse (becasse@cheredeprince.net)",
   "license": "ISC",
   "repository": {
     "type": "git",
     "url": ""
   },
   "dependencies": {
-    "jws": "3.1.4",
-    "lodash": "4.17.4",
-    "unirest": "0.5.1"
+    "jws": "^3.1.5",
+    "lodash": "^4.17.10",
+    "unirest": "^0.5.1"
   },
   "devDependencies": {
-    "chai": "4.1.1",
-    "mocha": "3.5.0"
+    "chai": "^4.1.2",
+    "mocha": "^3.5.3"
   }
 }
