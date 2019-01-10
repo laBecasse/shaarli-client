@@ -209,7 +209,6 @@ ShaarliClient.prototype.request = function (path, method, params, next) {
   })
 
   const uri = '' + Url.resolve(this.URL, path)
-  console.log(uri, params)
 
   if (method === 'get') {
     Unirest[method](uri)
